@@ -25,7 +25,7 @@ class Game extends Component {
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
     this.setState({
-      history: history.push([
+      history: history.concat([
         {
           squares: squares
         }
@@ -38,6 +38,14 @@ class Game extends Component {
     const history = this.state.history;
     const current = history[history.length - 1];
     const winner = calculateWinner(current.squares);
+    const moves = history.map((step, move) => {
+      const desc = moves ? 'go to move#' + move : 'Go to game start';
+      return (
+        <li>
+          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+        </li>
+      );
+    });
 
     let status;
     if (winner) {
@@ -57,7 +65,7 @@ class Game extends Component {
           </div>
           <div className="col-sm-4 game-info">
             <p className="h2">{status}</p>
-            <ul className="nav nav-pills flex-column">{/* TODO */}</ul>
+            <ul className="nav nav-pills flex-column">{moves}</ul>
           </div>
         </section>
       </article>

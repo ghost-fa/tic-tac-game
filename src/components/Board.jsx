@@ -1,20 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Square from './Square';
 import { calculateWinner } from '../modules/Winner';
 
 class Board extends Component {
-  handleClick(i) {
-    const squares = this.state.squares.slice();
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      squares: squares,
-      xIsNext: !this.state.xIsNext
-    });
-  }
   renderSquare(i) {
     return (
       <Square
@@ -25,17 +13,9 @@ class Board extends Component {
   }
 
   render() {
-    const Winner = calculateWinner(this.state.squares);
-    let status;
-    if (Winner) {
-      status = 'winner' + Winner;
-    } else {
-      const status = 'Next player:' + (this.state.xIsNext ? 'X' : 'O');
-    }
-
     return (
-      <React.Fragment>
-        <div className="status h2 text-center">{status}</div>
+      <Fragment>
+        <div className="status h2 text-center" />
         <div className="board">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -47,7 +27,7 @@ class Board extends Component {
           {this.renderSquare(7)}
           {this.renderSquare(8)}
         </div>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

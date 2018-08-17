@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import Square from './Square';
-import { calculateWinner } from '../modules/Winner';
 
 class Board extends Component {
   renderSquare(i) {

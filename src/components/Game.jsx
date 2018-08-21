@@ -15,6 +15,7 @@ class Game extends Component {
       xIsNext: true
     };
   }
+
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
@@ -27,7 +28,11 @@ class Game extends Component {
     this.setState({
       history: history.concat([
         {
-          squares: squares
+          squares: squares,
+          calc: {
+            row: i % 3,
+            col: Math.floor(i / 3)
+          }
         }
       ]),
       stepNumber: history.length,
@@ -46,13 +51,22 @@ class Game extends Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
+    const NotWinner = !winner && !current.squares.includes(null);
+
     const moves = history.map((step, move) => {
-      const desc = move ? 'Go to move #' + move : 'Go to game start';
+      const iscurrect = this.state.stepNumber === move;
+      const desc = move
+        ? `Go to move # ${move} (${step.calc.row}, ${step.calc.col})`
+        : `Go to game start `;
+
       return (
-        <li className="nav-item active " key={move}>
-          <button className="nav-link " onClick={() => this.jumpTo(move)}>
+        <li className="nav-item " key={move}>
+          <span
+            className={`nav-link ${iscurrect ? 'active' : ''}`}
+            onClick={() => this.jumpTo(move)}
+          >
             {desc}
-          </button>
+          </span>
         </li>
       );
     });
@@ -60,8 +74,10 @@ class Game extends Component {
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
+    } else if (NotWinner) {
+      status = 'dorw';
     } else {
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      status = 'Next: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
     return (
@@ -74,7 +90,7 @@ class Game extends Component {
             />
           </div>
           <div className="col-sm-4 game-info">
-            <p className="h2">{status}</p>
+            <p className="h2 ">{status}</p>
             <ul className="nav nav-pills flex-column">{moves}</ul>
           </div>
         </section>
